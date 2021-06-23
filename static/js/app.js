@@ -1,7 +1,3 @@
-//Use the D3 library to read in samples.json.
-
-
-//    Build Bubble Chart
 
 function chartBuilder(oneSample) {
   d3.json("samples.json").then((data) => {
@@ -14,7 +10,7 @@ function chartBuilder(oneSample) {
     var sample_values = result.sample_values;
     //alert(sample_values);
     
-    //build bubble chart id = "bubble"
+    //    Build Bubble Chart
     var myBubbleData = [{
       x: otu_ids, //Use otu_ids for the x values.
       y: sample_values, //Use sample_values for the y values.
@@ -27,7 +23,7 @@ function chartBuilder(oneSample) {
       }
     }]; 
 
-    //build bubble layout
+    //    Build bubble layout
     var myBubbleLayout = {
       title: "Bacterial Samples", 
       margin: {t:0},
@@ -37,7 +33,9 @@ function chartBuilder(oneSample) {
     };
     Plotly.newPlot("bubble", myBubbleData, myBubbleLayout); 
     
-    //Create a horizontal bar chart with a dropdown menu to display the top 10 OTUs found in that individual.
+    //    Build horizontal bar chart 
+    
+    //with a dropdown menu to display the top 10 OTUs found in that individual.
     var myBarData = [{
       y: otu_ids.slice(0, 10).map(otuID => `OTU ${otuID}`).reverse(), //Use otu_ids as the labels for the bar chart.
       x: sample_values.slice(0, 10).reverse(), //Use sample_values as the values for the bar chart.
@@ -46,7 +44,7 @@ function chartBuilder(oneSample) {
       orientation: "h"
     }];
 
-    //build bar layout
+    //  Build bar layout
     var myBarLayout = {
       title: "Top 10 Bacteria", 
       margin: {t:30, l: 100}
