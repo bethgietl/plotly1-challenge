@@ -1,3 +1,21 @@
+//Display the sample metadata, i.e., an individual's demographic information.
+//Display each key-value pair from the metadata JSON object somewhere on the page.
+
+function metadataBuilder(sample) {
+  d3.json("samples.json").then((data) => {
+    var metadata = data.metadata; 
+    var sampleArray = metadata.filter(sampleObject =>
+      sampleObject.id == sample);
+    var result = sampleArray[0]
+    var panel = d3.select("#sample-metadata");
+    panel.html("");
+    Object.entries(result).forEach(([key, value]) => {
+      panel.append("h6").text(`${key}: ${value}`);
+    });
+
+  })
+}
+
 
 function chartBuilder(oneSample) {
   d3.json("samples.json").then((data) => {
@@ -37,7 +55,9 @@ function chartBuilder(oneSample) {
     
     //with a dropdown menu to display the top 10 OTUs found in that individual.
     var myBarData = [{
-      y: otu_ids.slice(0, 10).map(otuID => `OTU ${otuID}`).reverse(), //Use otu_ids as the labels for the bar chart.
+      
+      //Slice the first 10 objects for plotting and reverse the array.
+      y: otu_ids.slice(0, 10).map(otuID => `OTU ${otuID}`).reverse(), //Use otu_ids as the labels for the bar chart. 
       x: sample_values.slice(0, 10).reverse(), //Use sample_values as the values for the bar chart.
       text: otu_labels.slice(0, 10).reverse(), //Use otu_labels as the hovertext for the chart.
       type: "bar", 
@@ -55,14 +75,6 @@ function chartBuilder(oneSample) {
   }); 
 }
 
-
-//4. Display the sample metadata, i.e., an individual's demographic information.
-
-
-//5. Display each key-value pair from the metadata JSON object somewhere on the page.
-
-//6. Update all of the plots any time that a new sample is selected.
-
 //populate the dropdown with the values from samples.json
 function initialize() {
   var dropdown = d3.select("#selDataset"); 
@@ -75,14 +87,16 @@ function initialize() {
     //capture first sample metadata from the list
     var firstSample = sampleList[0];
     chartBuilder(firstSample); 
-    //metadataBuilder(firstSample);
+    metadataBuilder(firstSample);
 
   }); 
 }
 
+//Update all of the plots any time that a new sample is selected.
 function optionChanged(newSample){
   //alert(newSample);
   chartBuilder(newSample);
+  metadataBuilder(newSample);
 }
 
 initialize(); 
